@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -62,8 +62,10 @@ def home():
             db.session.add(new_user)
             try:
                 db.session.commit()
-                flash('Registration successful! Please log in.', 'success')
-                return redirect(url_for('home')) 
+                session['user_id'] = new_user.id
+                session['user_domain'] = new_user.domain
+                flash(f'Registration successful! Welcome, {new_user.username}!', 'success')
+                return redirect(url_for('dashboard', user_domain=new_user.domain))
             except Exception as e:
                 db.session.rollback()
                 flash(f'An error occurred during registration: {e}', 'danger')
@@ -79,15 +81,48 @@ def home():
             user = User.query.filter_by(username=username).first()
 
             if user and user.password == password: # In a real app, compare HASHED passwords!
+                session['user_id'] = user.id
+                session['user_domain'] = user.domain
                 flash(f'Welcome back, {user.username}!', 'success')
-                # For now, just redirect to home. Later, this could be a user dashboard.
-                # Session management (e.g., flask_login) would go here.
-                return redirect(url_for('home'))
+                return redirect(url_for('dashboard', user_domain=user.domain))
             else:
                 flash('Login unsuccessful. Please check username and password.', 'danger')
                 return redirect(url_for('home'))
         
     return render_template('index.html')
+
+@app.route('/<string:user_domain>')
+def dashboard(user_domain):
+    if 'user_id' not in session or 'user_domain' not in session or session['user_domain'] != user_domain:
+        flash('Please log in to view this page.', 'warning')
+        return redirect(url_for('home'))
+        
+    # Querying for the user is still a good idea, e.g., to pass user details to the template
+    user = User.query.filter_by(domain=user_domain).first() 
+    if user:
+        # Ensure the logged-in user (from session) actually matches the user owning the domain
+        # This is an additional check, particularly if user_id from session is also used to fetch user details
+        if session.get('user_id') != user.id:
+            flash('Authorization error.', 'danger') # Or a more generic error
+            session.clear() # Clear session as a precaution
+            return redirect(url_for('home'))
+            
+        # Pass user object to template to display user-specific info if needed
+        return render_template('dashboard.html', user=user)
+    else:
+        # This case should ideally be rare if session['user_domain'] is correctly set and valid,
+        # but good as a fallback or if someone manually types a non-existent domain.
+        flash(f'Dashboard for domain "{user_domain}" not found or user does not exist.', 'danger')
+        session.clear() # Clear session as a precaution
+        return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('user_domain', None)
+    # session.clear() # Alternative to pop individual items
+    flash('You have been successfully logged out.', 'success')
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     # If 'init-db' is passed as a command-line argument, initialize the DB

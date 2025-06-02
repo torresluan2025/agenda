@@ -1,0 +1,182 @@
+<html><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B600%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#dce8f3",
+              "primary-foreground": "#121416",
+              accent: "#3b82f6", // A blue accent for highlighting
+              "accent-foreground": "#ffffff",
+              subtle: "#f1f2f4",
+              "subtle-foreground": "#6a7681",
+            },
+            fontFamily: {
+              sans: ['Manrope', '"Noto Sans"', 'sans-serif'],
+            },
+            boxShadow: {
+              'nav': '0 2px 4px 0 rgba(0, 0, 0, 0.05)',
+              'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-primary">
+<div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 bg-white px-6 py-4 shadow-nav">
+<div class="flex items-center gap-3 text-primary-foreground">
+<div class="size-7 text-accent">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</g>
+<defs>
+<clipPath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clipPath>
+</defs>
+</svg>
+</div>
+<h1 class="text-primary-foreground text-xl font-bold leading-tight">
+     {% if user and user.company_name %}
+       {{ user.company_name }}
+     {% else %}
+       Dashboard
+     {% endif %}
+   </h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-gray-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB1bibP9LhSRGQhWnw0ZbVQXtgtrMaA87zOwItdXhVm6PSS763C6cHgMffYdIv3pTjX6-6fMy_AepXIOkh2X8jYGcj_xbRb5F3Eq74c_tP3JUi69JX9IQFIBwJEkb1bT_F5oHancioPlrqGfEXy3E0balAxy0LdRYHAQ007V-yGC3Yt3bqt3xJvdE016WL3YkPLw0on4ISxsvi37QZbSWlXV1nFIeEVyLDzmE1CglyI2bUY6pT_5cCNZulDl8Awtj-B8XloIjhNngcC");'></div>
+<span class="text-primary-foreground text-sm font-medium">
+     {% if user and user.owner_name %}
+       {{ user.owner_name }}
+     {% elif user and user.username %}
+       {{ user.username }}
+     {% else %}
+       User
+     {% endif %}
+   </span>
+<a href="{{ url_for('logout') }}" class="text-subtle-foreground hover:text-accent transition-colors" title="Logout">
+<span class="material-icons-outlined">logout</span>
+</a>
+</div>
+</header>
+<div class="flex flex-1">
+<aside class="w-64 bg-white p-4 border-r border-gray-200 shadow-lg transition-all duration-300 ease-in-out group-[.sidebar-collapsed]/design-root:w-20">
+<div class="flex h-full flex-col justify-between">
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-accent text-accent-foreground hover:bg-blue-600 transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" href="#">
+<span class="material-icons-outlined">dashboard</span>
+<p class="text-sm font-semibold group-[.sidebar-collapsed]/design-root:hidden">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-foreground hover:bg-subtle transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" href="#">
+<span class="material-icons-outlined">bar_chart</span>
+<p class="text-sm font-medium group-[.sidebar-collapsed]/design-root:hidden">Reports</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-foreground hover:bg-subtle transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" href="#">
+<span class="material-icons-outlined">people</span>
+<p class="text-sm font-medium group-[.sidebar-collapsed]/design-root:hidden">Customers</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-foreground hover:bg-subtle transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" href="#">
+<span class="material-icons-outlined">inventory_2</span>
+<p class="text-sm font-medium group-[.sidebar-collapsed]/design-root:hidden">Products</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-foreground hover:bg-subtle transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" href="#">
+<span class="material-icons-outlined">settings</span>
+<p class="text-sm font-medium group-[.sidebar-collapsed]/design-root:hidden">Settings</p>
+</a>
+</nav>
+<button class="mt-auto flex items-center gap-3 px-4 py-3 rounded-lg text-subtle-foreground hover:bg-subtle hover:text-primary-foreground transition-colors group-[.sidebar-collapsed]/design-root:justify-center group-[.sidebar-collapsed]/design-root:px-0" onclick="document.querySelector('.group\/design-root').classList.toggle('sidebar-collapsed')" type="button">
+<span class="material-icons-outlined group-[.sidebar-collapsed]/design-root:hidden">chevron_left</span>
+<span class="material-icons-outlined hidden group-[.sidebar-collapsed]/design-root:inline">chevron_right</span>
+<p class="text-sm font-medium group-[.sidebar-collapsed]/design-root:hidden">Collapse</p>
+</button>
+</div>
+</aside>
+<main class="flex-1 p-6">
+<div class="mb-6">
+<h2 class="text-primary-foreground text-3xl font-bold leading-tight">Dashboard</h2>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-card">
+<p class="text-subtle-foreground text-sm font-medium">Total Revenue</p>
+<p class="text-primary-foreground text-3xl font-bold">$250,000</p>
+<p class="text-green-600 text-sm font-semibold">+20% from last month</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-card">
+<p class="text-subtle-foreground text-sm font-medium">Orders</p>
+<p class="text-primary-foreground text-3xl font-bold">1,200</p>
+<p class="text-green-600 text-sm font-semibold">+10% from last month</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-card">
+<p class="text-subtle-foreground text-sm font-medium">Customers</p>
+<p class="text-primary-foreground text-3xl font-bold">500</p>
+<p class="text-green-600 text-sm font-semibold">+5% from last month</p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+<div class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-card">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-primary-foreground text-lg font-semibold">Revenue Over Time</p>
+<p class="text-subtle-foreground text-sm">Last 12 Months</p>
+</div>
+<div class="text-right">
+<p class="text-primary-foreground text-2xl font-bold">$250,000</p>
+<p class="text-green-600 text-sm font-semibold">+20%</p>
+</div>
+</div>
+<div class="h-64">
+<svg fill="none" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_1131_5935_updated)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#3b82f6" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_1131_5935_updated" x1="236" x2="236" y1="1" y2="149">
+<stop stop-color="#dce8f3" stop-opacity="0.5"></stop>
+<stop offset="1" stop-color="#dce8f3" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-around text-xs text-subtle-foreground font-medium">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-card">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-primary-foreground text-lg font-semibold">Orders by Product</p>
+<p class="text-subtle-foreground text-sm">Last 12 Months</p>
+</div>
+<div class="text-right">
+<p class="text-primary-foreground text-2xl font-bold">1,200</p>
+<p class="text-green-600 text-sm font-semibold">+10%</p>
+</div>
+</div>
+<div class="grid grid-flow-col gap-4 grid-rows-[1fr_auto] items-end justify-items-center px-3 h-64">
+<div class="bg-accent rounded-t-md w-full" style="height: 50%;"></div>
+<p class="text-subtle-foreground text-xs font-medium">Product A</p>
+<div class="bg-accent rounded-t-md w-full" style="height: 40%;"></div>
+<p class="text-subtle-foreground text-xs font-medium">Product B</p>
+<div class="bg-accent rounded-t-md w-full" style="height: 100%;"></div>
+<p class="text-subtle-foreground text-xs font-medium">Product C</p>
+<div class="bg-accent rounded-t-md w-full" style="height: 40%;"></div>
+<p class="text-subtle-foreground text-xs font-medium">Product D</p>
+<div class="bg-accent rounded-t-md w-full" style="height: 50%;"></div>
+<p class="text-subtle-foreground text-xs font-medium">Product E</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+
+</body></html>

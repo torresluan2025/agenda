@@ -1,0 +1,16 @@
+.form-container {
+        display: none;
+      }
+      .form-container.active {
+        display: block;
+      }
+      .tab-button.active {
+        border-bottom-color: #0c7ff2;
+        color: #0c7ff2;
+        font-weight: 700;
+      }
+      .tab-button {
+        border-bottom-color: transparent;
+        color: #6b7280;
+        font-weight: 500;
+      }

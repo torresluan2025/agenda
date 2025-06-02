@@ -1,0 +1,117 @@
+<html><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<title>Midas PDV</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-slate-200 px-10 py-4 bg-white shadow-sm">
+<div class="flex items-center gap-3 text-slate-900">
+<svg class="h-8 w-8 text-[#0c7ff2]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h2 class="text-slate-900 text-xl font-bold leading-tight tracking-[-0.015em]">Midas PDV</h2>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-slate-700 hover:text-[#0c7ff2] text-sm font-medium leading-normal" href="#">Início</a>
+<a class="text-slate-700 hover:text-[#0c7ff2] text-sm font-medium leading-normal" href="#">Recursos</a>
+<a class="text-slate-700 hover:text-[#0c7ff2] text-sm font-medium leading-normal" href="#">Preços</a>
+<a class="text-slate-700 hover:text-[#0c7ff2] text-sm font-medium leading-normal" href="#">Suporte</a>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-[#0c7ff2] text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-blue-700 transition-colors duration-200">
+<span class="truncate">Começar</span>
+</button>
+</nav>
+</header>
+<main class="flex flex-1 items-center justify-center py-12 sm:py-16 lg:py-20">
+<div class="bg-white shadow-xl rounded-xl w-full max-w-lg mx-4">
+<div class="px-6 py-8 sm:px-10 sm:py-10">
+   {% with messages = get_flashed_messages(with_categories=true) %}
+     {% if messages %}
+       {% for category, message in messages %}
+         <div class="p-4 mb-4 text-sm rounded-lg 
+           {% if category == 'danger' %} bg-red-100 text-red-700 
+           {% elif category == 'success' %} bg-green-100 text-green-700 
+           {% elif category == 'warning' %} bg-yellow-100 text-yellow-700 
+           {% else %} bg-blue-100 text-blue-700 
+           {% endif %}" role="alert">
+           {{ message }}
+         </div>
+       {% endfor %}
+     {% endif %}
+   {% endwith %}
+<h2 class="text-slate-900 text-3xl font-bold leading-tight text-center mb-2">Bem-vindo ao Midas PDV</h2>
+<p class="text-slate-600 text-center text-sm mb-8">Acesse sua conta ou crie uma nova.</p>
+<div class="mb-8">
+<div class="flex border-b border-slate-200">
+<button class="tab-button flex-1 pb-3 pt-4 text-sm font-medium leading-normal tracking-[0.015em] focus:outline-none active" id="login-tab-button" onclick="showForm('login')">Entrar</button>
+<button class="tab-button flex-1 pb-3 pt-4 text-sm font-medium leading-normal tracking-[0.015em] focus:outline-none" id="register-tab-button" onclick="showForm('register')">Registrar</button>
+</div>
+</div>
+<div class="form-container active" id="login-form">
+<form class="space-y-6" method="POST" action="{{ url_for('home') }}">
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="login-username">Nome de usuário</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="login-username" name="username" placeholder="Digite seu nome de usuário" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="login-password">Senha</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="login-password" name="password" placeholder="Digite sua senha" type="password"/>
+</div>
+<button class="w-full flex items-center justify-center rounded-lg h-11 px-4 bg-[#0c7ff2] text-white text-sm font-semibold tracking-[0.015em] hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0c7ff2]" type="submit" name="login_submit">
+                    Entrar
+                  </button>
+<p class="text-slate-600 text-sm text-center pt-2">
+                    Não tem uma conta? <button class="font-medium text-[#0c7ff2] hover:underline focus:outline-none" onclick="showForm('register'); setActiveTab('register-tab-button');" type="button">Registrar</button>
+</p>
+</form>
+</div>
+<div class="form-container" id="register-form">
+<form class="space-y-6" method="POST" action="{{ url_for('home') }}">
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-company-name">Nome da Empresa</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-company-name" name="company_name" placeholder="Digite o nome da sua empresa" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-owner-name">Nome do Proprietário</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-owner-name" name="owner_name" placeholder="Digite o nome completo do proprietário" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-telephone">Telefone</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-telephone" name="telephone" placeholder="Digite seu número de telefone" type="tel"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-username">Nome de usuário</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-username" name="username" placeholder="Escolha um nome de usuário" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-password">Senha</label>
+<input class="form-input block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-password" name="password" placeholder="Crie uma senha forte" type="password"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 pb-1.5" for="register-domain">Domínio</label>
+<div class="flex items-center">
+<span class="inline-flex items-center px-3 h-12 rounded-l-md border border-r-0 border-slate-300 bg-slate-50 text-slate-500 text-sm">midaspdv.com.br/</span>
+<input class="form-input block w-full rounded-r-lg border-slate-300 shadow-sm focus:border-[#0c7ff2] focus:ring-[#0c7ff2] h-12 px-4 text-sm placeholder:text-slate-400" id="register-domain" name="domain" placeholder="seu-diretorio" type="text"/>
+</div>
+<p class="mt-1 text-xs text-slate-500">Apenas o nome do diretório é necessário.</p>
+</div>
+<button class="w-full flex items-center justify-center rounded-lg h-11 px-4 bg-[#0c7ff2] text-white text-sm font-semibold tracking-[0.015em] hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0c7ff2]" type="submit" name="register_submit">
+                    Registrar
+                  </button>
+<p class="text-slate-600 text-sm text-center pt-2">
+                    Já tem uma conta? <button class="font-medium text-[#0c7ff2] hover:underline focus:outline-none" onclick="showForm('login'); setActiveTab('login-tab-button');" type="button">Entrar</button>
+</p>
+</form>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body></html>

@@ -98,21 +98,14 @@ def dashboard(user_domain):
         return redirect(url_for('home'))
         
     # Querying for the user is still a good idea, e.g., to pass user details to the template
-    user = User.query.filter_by(domain=user_domain).first() 
-    if user:
-        # Ensure the logged-in user (from session) actually matches the user owning the domain
-        # This is an additional check, particularly if user_id from session is also used to fetch user details
-        if session.get('user_id') != user.id:
-            flash('Authorization error.', 'danger') # Or a more generic error
-            session.clear() # Clear session as a precaution
-            return redirect(url_for('home'))
-            
+    user = User.query.filter_by(id=session['user_id']).first() 
+    if user and user.domain == user_domain : # Check if the user from session owns the domain
         # Pass user object to template to display user-specific info if needed
         return render_template('dashboard.html', user=user)
     else:
-        # This case should ideally be rare if session['user_domain'] is correctly set and valid,
-        # but good as a fallback or if someone manually types a non-existent domain.
-        flash(f'Dashboard for domain "{user_domain}" not found or user does not exist.', 'danger')
+        # This case should ideally be rare if session is consistent, 
+        # but good as a fallback or if someone manually types a non-existent/wrong domain.
+        flash(f'Dashboard for domain "{user_domain}" not found, user does not exist, or domain mismatch.', 'danger')
         session.clear() # Clear session as a precaution
         return redirect(url_for('home'))
 
@@ -123,6 +116,23 @@ def logout():
     # session.clear() # Alternative to pop individual items
     flash('You have been successfully logged out.', 'success')
     return redirect(url_for('home'))
+
+@app.route('/<string:user_domain>/professionals/add', methods=['GET'])
+def add_professional_page(user_domain):
+    if 'user_id' not in session or 'user_domain' not in session or session['user_domain'] != user_domain:
+        flash('Please log in to view this page.', 'warning')
+        return redirect(url_for('home'))
+    
+    # Fetch the user again to pass to the dashboard template (which add_professional_page.html extends)
+    # This ensures the main dashboard layout has the necessary user data.
+    user = User.query.filter_by(id=session['user_id']).first()
+    if not user or user.domain != user_domain:
+        # This case should ideally not be hit if session is consistent, but as a safeguard:
+        flash('User not found or domain mismatch.', 'danger')
+        session.clear() # Clear inconsistent session
+        return redirect(url_for('home'))
+
+    return render_template('add_professional_page.html', user=user)
 
 if __name__ == '__main__':
     # If 'init-db' is passed as a command-line argument, initialize the DB
